@@ -1,0 +1,16 @@
+theme = 'hugo-theme-relearn'
+baseURL = 'https://cegepmv.github.io/420-420'
+languageCode = 'fr-fr'
+title = "projet développement d'application web"
+
+[params]
+    collapsibleMenu = true
+    disableLandingPageButton = true
+    themeVariant = ['zen-light']
+    disableInlineCopyToClipBoard = true
+    
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.goldmark.parser]
+    attribute = true
