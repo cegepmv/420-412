@@ -11,30 +11,33 @@ Le présent cours vise à amener la personne étudiante à concevoir, développe
 
 Ce cours constitue une étape clé dans l’axe de formation en développement Web et prépare directement la personne étudiante au cours Projet – Développement IdO, porteur de l’épreuve synthèse du programme.
 
-<!-- ### Objectifs et compétences visées
+### Objectifs et compétences visées
 À la fin de ce cours, la personne étudiante sera en mesure de :
-- Effectuer le développement d’applications Web transactionnelles, en respectant une architecture cohérente et évolutive.
-- Collaborer à la conception d’une application, en participant activement aux décisions d’architecture, de conception et de planification.
-- Évaluer des composants logiciels et matériels afin de faire des choix technologiques appropriés.
-- S’adapter à de nouvelles technologies informatiques, tant sur le plan des outils que des cadres de développement. -->
+- concevoir et développer une application Web transactionnelle en respectant une architecture claire, cohérente et évolutive ;
+- collaborer à la réalisation d’un projet logiciel en participant activement aux décisions d’architecture, de conception et de planification ;
+- utiliser et justifier des technologies Web appropriées en fonction des besoins du projet ;
+- appliquer une méthodologie de développement itérative et structurée ;
+- s’adapter à de nouvelles technologies et à des environnements de développement variés.
 
-<!-- ### Apprentissages clés
-- Concevoir une application Web à partir d’un document de conception.
-- Structurer une application selon une séparation claire entre le client, le serveur et l’API.
-- Mettre en place une base de données transactionnelle et assurer son intégration.
-- Appliquer une méthodologie itérative de développement (ex. Agile).
-- Planifier le développement, répartir les rôles et suivre l’avancement du projet.
-- Implémenter des mécanismes de sécurité, de gestion des sessions et de validation.
-- Tester, vérifier et documenter une application Web professionnelle. -->
 
-<!-- ### Quelques préalables au cours 
+### Apprentissages clés
+Ce cours permettra notamment de :
+- concevoir une application Web à partir d’un besoin ou d’un document de conception ;
+- structurer une application selon une séparation claire entre le frontend, le backend, l’API et la base de données ;
+- intégrer une base de données transactionnelle à une application Web ;
+- appliquer une méthodologie Agile pour planifier et suivre l’avancement du projet ;
+- travailler en équipe à l’aide d’outils de collaboration et de gestion de versions ;
+- tester, valider et documenter une application Web professionnelle.
+
+### Quelques préalables au cours 
 Ce cours suppose que certaines notions ont déjà été acquises. Les ressources suivantes sont fortement recommandées en révision en début de session.
 
 | Notions | Niveau attendu | Ressources |
 |------|---------------|------------|
-| **Agile - méthodologies de développement logiciel** | Comprendre les principes généraux des méthodologies itératives, le vocabulaire de base (itération, backlog, sprint), ainsi que les rôles et le déroulement d’un projet Agile. Etre abile avec trello. | [420-310 Architecture logicielle](add lien) |
-| **Programmation JavaScript / TypeScript** | Utiliser les concepts fondamentaux : fonctions, objets, modules, structures de contrôle et typage de base en TypeScript. | [ts](liens) |
-| **Développement Frontend avec React** | Comprendre la structure d’une application React, l’utilisation des composants, des hooks (state, effects) et la communication avec une API. | [420-211 Application web](lien cours) |
-| **Développement Backend et API** | Comprendre le fonctionnement d’une API REST, les opérations CRUD et la logique côté serveur. | [420-211 Application web](lien cours) |
-| **Bases de données relationnelles** | Comprendre un schéma de base de données relationnelle et effectuer des opérations simples (lecture, insertion, mise à jour). | [vers sql](lien) |
-| **Outils de développement et collaboration (Git)** | Utiliser les outils de base du développement collaboratif : gestion de versions, dépôt de code et organisation d’un projet. | [doc](lien) | -->
+| **Agile - méthodologies de développement logiciel** | Comprendre les principes généraux des méthodologies itératives, le vocabulaire de base (itération, backlog, sprint) et être à l’aise avec un outil de gestion comme Trello. | [420-310 Architecture logicielle](https://cegepmv.github.io/420-310/) |
+| **Technologies Web fondamentales (HTML, CSS)** | Comprendre la structure d’une page Web, les bases du style CSS et leur rôle dans une application frontend. | [420-211 Applications Web](https://cegepmv.github.io/420-211/) |
+| **Programmation JavaScript / TypeScript** | Utiliser les concepts fondamentaux : fonctions, objets, modules, structures de contrôle et notions de typage de base. | [420-211 Applications Web](https://cegepmv.github.io/420-211/) |
+| **Développement Frontend avec React** | Comprendre la structure d’une application React, l’utilisation des composants, des hooks (state, effects) et la communication avec une API. | [420-211 Applications Web](https://cegepmv.github.io/420-211/) |
+| **Développement Backend et API** | Comprendre le fonctionnement d’une API REST, les opérations CRUD et la logique côté serveur. | [420-211 Applications Web](https://cegepmv.github.io/420-211/) |
+| **Bases de données relationnelles** | Comprendre un schéma de base de données relationnelle et effectuer des opérations simples de lecture et de manipulation des données. | À venir |
+| **Outils de développement collaboratif (Git)** | Utiliser un dépôt Git pour gérer le code source, collaborer et organiser un projet logiciel. | À venir|
