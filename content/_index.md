@@ -41,3 +41,29 @@ Ce cours suppose que certaines notions ont déjà été acquises. Les ressources
 | **Développement Backend et API** | Comprendre le fonctionnement d’une API REST, les opérations CRUD et la logique côté serveur. | [420-211 Applications Web](https://cegepmv.github.io/420-211/) |
 | **Bases de données relationnelles** | Comprendre un schéma de base de données relationnelle et effectuer des opérations simples de lecture et de manipulation des données. | À venir |
 | **Outils de développement collaboratif (Git)** | Utiliser un dépôt Git pour gérer le code source, collaborer et organiser un projet logiciel. | À venir|
+
+<!-- Questions éval niveau  -->
+<!-- À quoi sert une API dans une architecture client–serveur ?
+Quelle est la différence entre une application Web statique et une application Web transactionnelle ?
+Quel est le rôle de HTML dans une application Web ?
+À quoi sert CSS ?
+Js est dev en frontend slm ? 
+c'est quoi le eventloop
+Quelle est la différence principale entre JavaScript et TypeScript ?
+Qu’est-ce qu’un hook ? Peux-tu en nommer un ?
+Que signifie l’acronyme CRUD ?
+diff entre PUT et UPDATE
+Peux-tu nommer un autre style d’API que REST ?
+Qu’est-ce qu’une base de données relationnelle ?
+Quelle est la différence entre un commit et un push ?
+Qu’est-ce qu’une méthodologie Agile ?
+Quelle est la différence entre Scrum et Kanban ?
+À quoi sert un backlog ?
+Pourquoi le développement itératif est-il souvent préférable au développement en une seule phase ?
+Quel est l’intérêt d’utiliser un outil comme Trello dans un projet logiciel ?
+Qu’est-ce qu’un SGBD ?
+Quelle est la différence entre SQL et PostgreSQL ?
+Qu’est-ce qu’une clé primaire ?
+À quoi sert une clé étrangère ?
+Quelle est la différence entre une base relationnelle et une base NoSQL ?
+Donne un exemple de base de données NoSQL et son type (document, clé–valeur, etc.) -->

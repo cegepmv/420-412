@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Application Web transactionnelle - projet de session</title>
+
+  <style>
+    :root{
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --shadow: 0 10px 28px rgba(15,23,42,.08);
+      --radius: 16px;
+      --accent: #4f46e5;
+      --accent2: #0ea5e9;
+      --warn: #f59e0b;
+      --ok: #16a34a;
+    }
+
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .layout{
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 16px 56px;
+      align-items: start;
+    }
+
+    /* Sidebar */
+    aside{
+      position: sticky;
+      top: 12px;
+      align-self: start;
+      background: rgba(248,250,252,.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand{
+      padding: 10px 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(79,70,229,.10), rgba(14,165,233,.10));
+      margin-bottom: 12px;
+    }
+    .brand h1{
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.25;
+      letter-spacing: .2px;
+    }
+    .brand p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    nav a{
+      display: block;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 650;
+      font-size: 14px;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: border-color .12s ease, background .12s ease, transform .06s ease;
+    }
+    nav a:hover{
+      background: #fff;
+      border-color: rgba(79,70,229,.25);
+      transform: translateY(-1px);
+    }
+    nav a small{
+      display: block;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .navgroup{
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Main content */
+    main{
+      min-width: 0;
+    }
+
+    .hero{
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) + 6px);
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 22px 20px;
+      margin-bottom: 14px;
+    }
+    .hero h2{
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: .2px;
+    }
+    .hero p{
+      margin: 0;
+      color: var(--muted);
+    }
+
+    section.card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 18px;
+      margin: 14px 0;
+    }
+
+    section.card h3{
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: .2px;
+    }
+    section.card h4{
+      margin: 14px 0 8px;
+      font-size: 16px;
+    }
+
+    p{
+      margin: 10px 0;
+      line-height: 1.65;
+    }
+    .muted{ color: var(--muted); }
+
+    ul{
+      margin: 10px 0 0 18px;
+      line-height: 1.65;
+    }
+    li{ margin: 6px 0; }
+
+    .divider{
+      height: 1px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+
+    .callout{
+      border: 1px solid rgba(14,165,233,.25);
+      background: rgba(14,165,233,.06);
+      border-radius: 14px;
+      padding: 12px 12px;
+      margin: 12px 0 0;
+    }
+
+    /* Table */
+    .table-wrap{
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-top: 12px;
+      background: #fff;
+    }
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+    th, td{
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th{
+      text-align: left;
+      background: rgba(2,6,23,.03);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    tr:last-child td{ border-bottom: none; }
+
+    /* Accordions */
+    details{
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: #fff;
+      margin: 10px 0;
+    }
+    summary{
+      cursor: pointer;
+      font-weight: 800;
+      list-style: none;
+    }
+    summary::-webkit-details-marker{ display: none; }
+    summary:after{
+      content: "▾";
+      float: right;
+      color: var(--muted);
+    }
+    details[open] summary:after{ content: "▴"; }
+
+    .quote{
+      border-left: 4px solid rgba(79,70,229,.35);
+      padding: 8px 12px;
+      margin: 10px 0;
+      background: rgba(79,70,229,.05);
+      border-radius: 10px;
+      color: var(--muted);
+    }
+
+    /* Sub headings / anchors */
+    .tag{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(79,70,229,.20);
+      background: rgba(79,70,229,.06);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .layout{ grid-template-columns: 1fr; }
+      aside{ position: relative; top: 0; }
+    }
+
+    /* Intro readability helpers */
+    .phases{
+    display: grid;
+    gap: 12px;
+    margin: 12px 0 6px;
+    }
+    .phase{
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(79,70,229,.05), rgba(14,165,233,.03));
+    border-radius: 16px;
+    padding: 12px 12px;
+    box-shadow: 0 8px 18px rgba(15,23,42,.06);
+    position: relative;
+    }
+    .phase::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 4px;
+    border-radius: 999px;
+    background: rgba(79,70,229,.55);
+    }
+    .phase .badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 900;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(79,70,229,.09);
+    border: 1px solid rgba(79,70,229,.18);
+    padding: 6px 10px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+    }
+    .phase p{
+    margin: 6px 0 0;
+    }
+    .phase.shift{
+    /*margin-left: 26px;  décalage à droite */
+    }
+    .phase.shift::before{
+    background: rgba(14,165,233,.55); /* couleur différente pour phase 2 */
+    }
+    .phase.shift .badge{
+    color: var(--accent2);
+    background: rgba(14,165,233,.10);
+    border-color: rgba(14,165,233,.18);
+    }
+
+    /* optional: highlight strong words inside intro */
+    #intro strong{
+    color: var(--text);
+    }
+    #intro em{
+    color: var(--text);
+    font-style: italic;
+    }
+
+    /* CONTEXTE — readability */
+    /* Lists as “chips/grid” */
+    .list-grid{
+    display: grid;
+    gap: 10px;
+    margin: 10px 0 0;
+    padding-left: 0;
+    list-style: none;
+    }
+
+    .list-grid li{
+    border: 1px solid var(--border);
+    background: rgba(2,6,23,.02);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin: 0;
+    }
+
+    .list-grid li em{ font-style: italic; }
+    .list-grid li strong{ font-weight: 900; }
+
+    @media (min-width: 860px){
+    .list-grid.cols-2{ grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Softer subsection titles */
+    #contexte h4{
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(148,163,184,.6);
+    }
+
+    #contexte .muted{
+    margin-top: 6px;
+    }
+
+    /* THEME — readability */
+    #theme p{ line-height: 1.65; }
+
+    .note{
+    border: 1px solid rgba(79,70,229,.22);
+    background: rgba(79,70,229,.06);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin: 10px 0 12px;
+    }
+
+    .note strong{ font-weight: 900; }
+    .note em{ font-style: italic; }
+
+
+  </style>
+</head>
+
+<body>
+
+  <div class="layout">
+
+    <aside>
+      <div class="brand">
+        <h1>Application Web transactionnelle</h1>
+        <p>navigation projet de session</p>
+      </div>
+
+      <nav>
+        <a href="#intro">Introduction<small>contexte et phases du projet</small></a>
+
+        <div class="navgroup">
+            <a href="#contexte">Cadre et périmètre du projet<small>stack, approche, exigences</small></a>
+            <a href="#theme">Thématique du projet<small>projet de référence et attentes minimales</small></a>
+        </div>
+        
+        <div class="navgroup">
+          <a href="#orga">Organisation du projet et méthodologie<small>approche agile et itérations</small></a>
+          <a href="#livrables">Livrables attendus<small>remises et livrables</small></a>
+        </div>
+
+        <div class="navgroup">
+          <a href="#grille">Grille de correction<small>répartition aperçu général</small></a>
+          <a href="#infos">Information additionnelles<small>responsabilité, IA, évaluations</small></a>
+        </div>
+      </nav>
+    </aside>
+
+    <main>
+
+      <header class="hero">
+        <h2>Application Web transactionnelle - projet de session</h2>
+        <!-- <p class="muted">Énoncé — version page Web</p> -->
+      </header>
+
+      <!-- INTRO -->
+      <section id="intro" class="card">
+        <!-- <span class="tag">Section</span> -->
+
+        <p>À travers ce cours, vous serez amenées à réaliser, <strong>en équipe</strong>, un projet de développement d’une application Web transactionnelle qui s’échelonnera sur l’ensemble de la session.</p>
+
+        <p>Le projet vise à mettre en pratique, de manière intégrée, les notions vues et acquises dans les cours précédents ainsi que celles abordées durant la session, en reproduisant un contexte réaliste de développement logiciel. Il vous permettra d’expérimenter les différentes étapes d’un projet Web, depuis la planification initiale jusqu’à la livraison d’une application fonctionnelle.</p>
+
+        <p>Le déroulement de ce projet se fera en <strong>deux grandes phases complémentaires</strong>.</p>
+
+        <div class="phases">
+            <div class="phase">
+                <div class="badge">1. planification & conception</div>
+                <p>La première phase est consacrée à la planification, à la conception et à l’apprentissage guidé. Lors de cette période, vous serez appelées à analyser le problème, définir les besoins, identifier les cas d’utilisation, préciser les exigences fonctionnelles et non fonctionnelles, et structurer votre projet à l’aide d’outils et de pratiques issus des méthodologies Agile. Cette phase donne lieu à plusieurs remises intermédiaires et s’accompagne d’un développement encadré, réalisé progressivement avec l’enseignante.</p>
+            </div>
+
+            <div class="phase shift">
+                <div class="badge">2. développement itératif</div>
+                <p>La seconde phase est orientée vers le développement itératif de l’application. Le projet sera alors réalisé en plusieurs itérations de deux semaines, chacune donnant lieu à des livrables clairs et à des démonstrations. Cette phase mènera à la remise finale du projet, comprenant une présentation de l’application ainsi que des entrevues individuelles.</p>
+            </div>
+        </div>
+
+
+        <div class="callout">
+          <p style="margin:0;">La suite de cet énoncé précise le cadre et périmètre du projet, les attentes fonctionnelles, l’organisation du travail ainsi que les différentes remises et livrables prévus tout au long de la session.</p>
+        </div>
+      </section>
+
+      <!-- CONTEXTE -->
+      <section id="contexte" class="card">
+        <h3>Cadre et périmètre du projet</h3>
+
+        <p>Un <strong><em>stack</em> technologique commun</strong> sera présenté et utilisé en classe, dans le cadre de ce projet. L’application développée devra respecter ce <em>stack</em>, tant pour le <em>frontend</em> que pour le <em>backend</em> et la base de données, afin d’assurer une cohérence pédagogique et technique entre les équipes.</p>
+
+        <p>Certaines fonctionnalités transversales, notamment la gestion des comptes utilisateurs, l’authentification et les mécanismes de base de contrôle d’accès, feront l’objet d’une <strong>mise en place commune et guidée</strong>. Cette approche vise à fournir une base fonctionnelle uniforme à l’ensemble des équipes, tout en vous laissant la responsabilité de concevoir, d’implémenter et de faire évoluer la logique métier spécifique à votre projet.</p>
+
+        <p>Le développement de l’application se fera selon une <strong>approche itérative</strong>, inspirée des méthodologies Agile. Tout au long de la session, vous devrez planifier, implémenter et démontrer progressivement les fonctionnalités de votre application, en maintenant un <strong>tableau de suivi (kanban)</strong> à jour.</p>
+
+        <!-- <div class="divider"></div> -->
+        <h4>Exigences générales de l’application</h4>
+        <p class="muted">L’application développée devra notamment :</p>
+        <!-- <ul>
+          <li>reposer sur une architecture client–serveur claire, avec une séparation explicite entre le <em>frontend</em>, le <em>backend</em>, l’API et la base de données ;</li>
+          <li>assurer une séparation adéquate entre la logique cliente et la logique d’affaires ;</li>
+          <li>exposer une API <em>backend</em> simple et cohérente, permettant des transactions pouvant modifier l’état de la base de données ;</li>
+          <li>intégrer une logique métier non triviale, implémentée côté serveur ;</li>
+          <li>utiliser une base de données transactionnelle, correctement modélisée et implantée sur un serveur local ;</li>
+          <li>assurer une gestion des accès et des rôles, incluant des mécanismes de validation administrative lorsque requis ;</li>
+          <li>proposer une interface <em>frontend</em> fluide, avec une navigation claire et des formulaires fonctionnels ;</li>
+          <li>permettre un développement indépendant des composants, notamment en rendant le <em>backend</em> testable sans dépendre directement du <em>frontend</em> (ex. tests via un client API) ;</li>
+          <li>exploiter de manière judicieuse des patrons de conception et de bonnes pratiques architecturales ;</li>
+          <li>utiliser des cadriciels modernes, tant côté client que côté serveur.</li>
+        </ul> -->
+          <ul class="list-grid cols-2">
+            <li>reposer sur une architecture client–serveur claire, avec une séparation explicite entre le <em>frontend</em>, le <em>backend</em>, l’API et la base de données ;</li>
+            <li>assurer une séparation adéquate entre la logique cliente et la logique d’affaires ;</li>
+            <li>exposer une API <em>backend</em> simple et cohérente, permettant des transactions pouvant modifier l’état de la base de données ;</li>
+            <li>intégrer une logique métier non triviale, implémentée côté serveur ;</li>
+            <li>utiliser une base de données transactionnelle, correctement modélisée et implantée sur un serveur local ;</li>
+            <li>assurer une gestion des accès et des rôles, incluant des mécanismes de validation administrative lorsque requis ;</li>
+            <li>proposer une interface <em>frontend</em> fluide, avec une navigation claire et des formulaires fonctionnels ;</li>
+            <li>permettre un développement indépendant des composants, notamment en rendant le <em>backend</em> testable sans dépendre directement du <em>frontend</em> (ex. tests via un client API) ;</li>
+            <li>exploiter de manière judicieuse des patrons de conception et de bonnes pratiques architecturales ;</li>
+            <li>utiliser des cadriciels modernes, tant côté client que côté serveur.</li>
+        </ul>
+
+        <h4>Qualité du code et du développement</h4>
+        <p class="muted">Une attention particulière devra être portée à :</p>
+        <ul>
+          <li>la cohérence et le découplage des modules du service ;</li>
+          <li>l’organisation logique des instructions et la lisibilité du code ;</li>
+          <li>le choix approprié des algorithmes, des types de données et des structures de données ;</li>
+          <li>la gestion complète des erreurs et le bon fonctionnement du service ;</li>
+          <li>la présence d’une documentation claire et de tests pour les différentes parties de l’application, afin de faciliter la compréhension, l’utilisation et l’évolution du projet.</li>
+        </ul>
+      </section>
+
+      <!-- THEME -->
+      <section id="theme" class="card">
+        <h3>Thématique du projet</h3>
+
+        <p>Vous devrez définir, en équipe, un projet complet de développement d’une application Web transactionnelle respectant l’ensemble des exigences présentées dans cet énoncé.</p>
+
+        <div class="note">
+            <p style="margin:0;">Un <strong>projet de référence</strong> sera proposé par l’enseignante afin d’illustrer le niveau de complexité attendu. Ce projet pourra servir de <strong>source d’inspiration</strong> pour définir le cadre de votre application, tant sur le plan fonctionnel que sur le plan de la logique métier. Il ne s’agit toutefois pas d’un modèle à reproduire à l’identique.</p>
+        
+        <!-- <p>Un <strong>projet de référence</strong> sera proposé par l’enseignante afin d’illustrer le niveau de complexité attendu. Ce projet pourra servir de source d’inspiration pour définir le cadre de votre application, tant sur le plan fonctionnel que sur le plan de la logique métier. Il ne s’agit toutefois pas d’un modèle à reproduire à l’identique.</p> -->
+
+        <p>Le projet de référence porte sur la <strong>gestion de l’aide à la réussite au cégep</strong>, et comprend notamment les <strong>fonctionnalités suivantes</strong> :</p>
+        <ul>
+          <li>la gestion des comptes utilisateurs et des rôles (étudiant·e, enseignant·e, côté administration) ;</li>
+          <li>l’inscription à des services à l’aide de formulaires (tutorat, ateliers) ;</li>
+          <li>la gestion d’un horaire et de disponibilité des locaux ;</li>
+          <li>la validation administrative de certaines actions avant leur publication ;</li>
+          <li>la gestion des présences et des disponibilités ;</li>
+          <li>un moyen de contact direct avec l’administration via l’application.</li>
+        </ul>
+
+        </div>
+        <p>Votre équipe n’est pas tenue de reproduire exactement ce projet. Toutefois, l’application développée devra présenter une complexité fonctionnelle et une logique métier équivalentes, incluant des règles de gestion claires et non triviales.</p>
+
+        <h3>Attentes fonctionnelles minimales</h3>
+        <p class="muted">L’application développée devra répondre aux exigences fonctionnelles minimales suivantes. Ces exigences constituent la base obligatoire du projet et serviront de référence pour l’évaluation.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Domaine</th>
+                <th>Exigences</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Gestion des utilisateurs</strong></td>
+                <td>Création de comptes, authentification, rôles et restrictions d’accès</td>
+              </tr>
+              <tr>
+                <td><strong>Fonctionnalités centrales</strong></td>
+                <td>Gestion d’un ou plusieurs services, activités ou entités principales</td>
+              </tr>
+              <tr>
+                <td><strong>Formulaires</strong></td>
+                <td>Formulaires permettant l’inscription, la création ou la modification de données</td>
+              </tr>
+              <tr>
+                <td><strong>Logique métier</strong></td>
+                <td>Règles de gestion non triviales appliquées côté serveur</td>
+              </tr>
+              <tr>
+                <td><strong>Validation administrative</strong></td>
+                <td>Actions nécessitant une approbation avant d’être visibles ou actives</td>
+              </tr>
+              <tr>
+                <td><strong>Affichage dynamique</strong></td>
+                <td>Présentation d’un état des lieux, d’un horaire ou d’une vue synthèse</td>
+              </tr>
+              <tr>
+                <td><strong>Communication</strong></td>
+                <td>Mécanisme permettant de contacter un responsable ou l’administration</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="muted" style="margin-top:12px;">Voici le détails par catégorie</p>
+
+        <details>
+          <summary>Gestion des comptes et authentification</summary>
+          <ul>
+            <li>Création de comptes utilisateurs ;</li>
+            <li>Authentification (connexion / déconnexion) ;</li>
+            <li>Gestion des rôles (ex. utilisateur, administrateur, responsable, etc.) ;</li>
+            <li>Restrictions d’accès selon le rôle.</li>
+          </ul>
+          <div class="quote"> À noter qu'une partie de cette fonctionnalité sera mise en place collectivement en classe.</div>
+        </details>
+
+        <details>
+          <summary>Fonctionnalités principales</summary>
+          <ul>
+            <li>Gestion d’un élément central propre au projet (services, activités, produits, réservations, etc.) ;</li>
+            <li>Création et modification de ces éléments à l’aide de formulaires</li>
+            <li>Affichage de ces éléments sous forme d’état des lieux (horaire, liste dynamique ou équivalent pertinent) ;</li>
+            <li>Lien entre ces éléments et les utilisateurs (ou rôles spécifiques).</li>
+          </ul>
+        </details>
+
+        <details>
+          <summary>Logique métier</summary>
+          <ul>
+            <li>Implémentation de la logique métier explicite côté <em>backend</em> ;</li>
+            <li>Gestion de contraintes (ex. disponibilités, conflits, validation, activation/désactivation) ;</li>
+            <li>Avec traitement des cas limites et des erreurs.</li>
+          </ul>
+        </details>
+
+        <details>
+          <summary>Interface utilisateur</summary>
+          <ul>
+            <li>Une page d’accueil présentant clairement l’application (contexte, services et fonctionnalités offertes);</li>
+            <li>Navigation fluide et intuitive ;</li>
+            <li>Formulaires fonctionnels et validation des données côté client.</li>
+          </ul>
+        </details>
+
+        <details>
+          <summary>Communication avec les utilisateurs</summary>
+          <ul>
+            <li>La présence d’un mécanisme de communication (ex. page "nous contacter") ;</li>
+            <li>Avec traitement des demandes côté backend, et message envoyé à l’administration ou à un responsable.</li>
+          </ul>
+        </details>
+      </section>
+
+      <!-- ORGA -->
+      <section id="orga" class="card">
+        <h3>Organisation du projet et méthodologie</h3>
+
+        <p>Le projet sera réalisé selon une <strong>approche itérative</strong>, inspirée des méthodologies Agile, impliquant des <strong>retours réguliers</strong> sur le travail effectué. Les livrables produits au fil de la session ne sont pas considérés comme <strong>figés</strong> : ils pourront être <strong>révisés, ajustés et améliorés</strong> en fonction de l’évolution du projet, des rétroactions reçues et des décisions prises lors des itérations suivantes.</p>
+
+        <p>Le travail se fera <strong>en équipe</strong> et devra respecter les éléments suivants :</p>
+        <ul>
+          <li>Un tableau de suivi (Kanban) devra être mis en place dès le début du projet et maintenu à jour tout au long de la session ;</li>
+          <li>Les phases d’analyse, de planification et de conception seront guidées par des livrables à remettre ;</li>
+          <li>Le développement sera structuré en itérations, chacune donnant lieu à une démonstration ;</li>
+          <li>Les fonctionnalités devront être développées de manière progressive, cohérente et alignée avec le <em>backlog</em>.</li>
+        </ul>
+      </section>
+
+      <!-- LIVRABLES -->
+      <section id="livrables" class="card">
+        <h3>Livrables attendus</h3>
+
+        <p>Le projet comporte plusieurs remises réparties sur la session.</p>
+
+        <details open>
+          <summary>1. Mise en place du projet et documentation initiale</summary>
+          <p>Cette remise vise à faire valider l’idée du projet auprès de l’enseignante et à poser les bases nécessaires à sa structuration, en vue des phases subséquentes du cours, avant le démarrage du développement itératif.</p>
+
+          <p>Vous devrez remettre un rapport présentant :</p>
+          <ul>
+            <li>Une description claire de l’application ;</li>
+            <li>La problématique et les objectifs (cadre);</li>
+            <li>Une vue d’ensemble des fonctions de l’application ;</li>
+            <li>La description des utilisateurs et des rôles ;</li>
+            <li>Les exigences fonctionnelles et non fonctionnelles ;</li>
+            <li>Lees contraintes de l'application ;</li>
+            <li>Les cas d’utilisation (<em>use cases</em>) ;</li>
+            <li>La planification à travers la méthodologie de développement ;</li>
+          </ul>
+          Ainsi que 
+            <ul>
+              <li>La mise en place du tableau Kanban, incluant un <em>backlog</em> initial ;</li>
+              <li>L’organisation du dépôt de code, incluant la structure, les accès et les permissions.</li>
+            </ul>
+        </details>
+
+        <details>
+          <summary>2. Architecture générale et conception de l’API</summary>
+          <p>Cette remise vise à valider les choix d’architecture et de conception retenus pour votre application, en s’appuyant sur les notions, exemples et exercices réalisés en classe.</p>
+
+          <p>À cette étape, vous devrez être en mesure de traduire les besoins fonctionnels identifiés précédemment en une architecture logicielle cohérente, ainsi qu’en une première version structurée de votre API <em>backend</em>. Le travail demandé s’inscrit directement dans la continuité des activités guidées réalisées en classe, notamment en ce qui concerne la conception de l’API, la séparation des responsabilités et l’utilisation de patrons architecturaux.</p>
+
+          <p>Vous devrez remettre une documentation présentant :</p>
+          <ul>
+            <li>une description de l’architecture générale de l’application, mettant en évidence les principales couches et leurs interactions ;</li>
+            <li>le design de l’API, incluant : les routes principales, les responsabilités associées à chaque route, les opérations supportées (ex. création, lecture, modification, suppression) ;</li>
+            <li>des diagrammes pertinents, inspirés de ceux réalisés en classe, tels qu'un diagramme d’architecture, un diagramme de flux ou de séquence, lorsque pertinent ;</li>
+            <li>une justification des choix technologiques et architecturaux, en lien avec les besoins du projet et les contraintes identifiées ;</li>
+            <li>l’identification et la justification des patrons architecturaux ou de conception utilisés (ex. MVC).</li>
+          </ul>
+
+          <p>Cette remise doit démontrer que votre équipe est en mesure de concevoir une architecture claire, testable et évolutive, et de documenter adéquatement les décisions prises avant le développement itératif des fonctionnalités.</p>
+        </details>
+
+        <details>
+          <summary>3. Modélisation de la base de données</summary>
+          <p>Cette remise vise à structurer et valider la persistance des données de votre application, en cohérence avec les besoins fonctionnels, la logique métier et l’architecture définis lors des remises précédentes.</p>
+
+          <p>À cette étape, vous devrez être en mesure de traduire les exigences de votre application en un modèle de données relationnel cohérent, en vous appuyant sur les notions et exemples vus en classe (modélisation relationnelle, clés primaires et étrangères, contraintes, normalisation, etc.).</p>
+
+          <p>Vous devrez remettre une documentation présentant :</p>
+          <ul>
+            <li>le schéma de la base de données, illustrant l’ensemble des tables et leurs relations ;</li>
+            <li>la description détaillée des tables, incluant : les attributs principaux, les types de données, les clés primaires et étrangères, les contraintes et règles d’intégrité, telles que : contraintes de clé, règles d’unicité, dépendances et contraintes métier implémentées au niveau des données ;</li>
+            <li>une justification des choix de modélisation, en lien avec : les cas d’utilisation, la logique métier, les contraintes fonctionnelles et techniques du projet.</li>
+          </ul>
+
+          <p>Cette remise doit démontrer que votre équipe est en mesure de concevoir une base de données transactionnelle robuste, cohérente avec l’architecture globale de l’application, et prête à être utilisée dans les phases de développement et de démonstration à venir.</p>
+        </details>
+
+        <div class="divider"></div>
+
+        <div class="callout">
+            <p style="margin:0;">Les livrables demandés tout au long de la session seront accompagnés de gabarits, d’exemples ou d’<strong>indications claires fournies en classe</strong>. Il demeure toutefois de votre responsabilité, en tant qu’équipe et à titre individuel, de produire une documentation suffisante, claire, cohérente et rigoureuse, reflétant l’état réel de votre projet.</p>
+        </div>
+        
+        <p>Une attention particulière sera portée à :</p>
+        <ul>
+          <li>la clarté du code, son organisation et sa lisibilité ;</li>
+          <li>la progression continue du projet au fil de la session ;</li>
+          <li>la capacité à travailler efficacement en équipe ;</li>
+          <li>la qualité des démonstrations, tant sur le plan technique que sur le plan de la communication.</li>
+        </ul>
+
+        <p>L’objectif pédagogique global de ce projet est de favoriser le <strong>développement de l’autonomie</strong>, du <strong>jugement professionnel</strong> et de la capacité d’analyse, tout en vous plaçant dans un contexte proche de la réalité du milieu du développement logiciel.</p>
+      </section>
+
+      <!-- GRILLE -->
+      <section id="grille" class="card">
+        <h3>Grille de correction</h3>
+
+        <p>L’évaluation du projet est répartie en deux grandes parties :<br/>
+          la phase de planification et de conception, puis la phase de développement itératif.</p>
+
+        <div class="phases">
+            <div class="phase">
+                <div class="badge">P1 — avancement et conception du projet</div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Évaluation</th>
+                                <th>Pondération</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Remise 1 — Documentation initiale et mise en place du projet</td><td>7 %</td></tr>
+                            <tr><td>Remise 2 — Design de l’API et documentation architecturale</td><td>10 %</td></tr>
+                            <tr><td>Remise 3 — Modélisation de la base de données</td><td>5 %</td></tr>
+                            <tr><td>Démonstrations de suivi (développement guidé)</td><td>8 %</td></tr>
+                            <tr><td><strong>Sous-total</strong></td><td><strong>30 %</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="phase shift">
+                <div class="badge">P2 — développement itératif des fonctionnalités</div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Évaluation</th>
+                                <th>Pondération</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Démonstration 1</td><td>10 %</td></tr>
+                            <tr><td>Démonstration 2</td><td>10 %</td></tr>
+                            <tr><td>Démonstration 3 et remise finale du projet</td><td>15 %</td></tr>
+                            <tr><td>Entrevue individuelle</td><td>15 %</td></tr>
+                            <tr><td><strong>Sous-total</strong></td><td><strong>50 %</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="callout">
+          <p style="margin:0;">Les critères détaillés d’évaluation pour chaque remise et chaque démonstration seront précisés au moment opportun et serviront de référence pour la rétroaction et l’évaluation.</p>
+        </div>
+        </section>
+
+      <!-- INFOS -->
+      <section id="infos" class="card">
+        <h3>Information additionnelles</h3>
+
+        <p><strong>Le travail d’équipe et responsabilité individuelle</strong> : bien que ce projet soit réalisé en équipe, il demeure de la responsabilité de chaque personne étudiante de comprendre, d’expliquer et de justifier l’ensemble du travail réalisé dans le cadre du projet.</p>
+
+        <p>Il ne sera donc pas acceptable de se dégager de certaines parties du projet en invoquant qu’elles ont été réalisées par un ou une coéquipier·ère.<br/>
+          Le projet est considéré comme une réalisation collective, et chaque membre en est pleinement responsable.</p>
+
+        <p>À ce titre, les démonstrations et les remises se feront en équipe complète, sauf indication contraire.</p>
+
+        <div class="divider"></div>
+
+        <p><strong>L'utilisation des outils d’aide et de l’intelligence artificielle</strong> : dans le cadre de ce projet, l’objectif principal est l’apprentissage réel, la compréhension des concepts et le développement de l’autonomie professionnelle.</p>
+
+        <p>L’utilisation d’outils externes, incluant les outils d’intelligence artificielle, ne doit en aucun cas :</p>
+        <ul>
+          <li>remplacer votre réflexion ;</li>
+          <li>produire du code ou des livrables que vous ne comprenez pas entièrement ;</li>
+          <li>introduire du contenu que vous n’êtes pas en mesure d’expliquer ou de justifier.</li>
+        </ul>
+
+        <p>L'entiereté du travail remis et présenté doit provenir de votre compréhension, de vos choix et de votre travail réel.<br/>
+          Vous êtes responsables de l’intégralité du contenu, du code et de la documentation produits dans le cadre du projet.</p>
+
+        <div class="divider"></div>
+
+        <!-- <p><strong>Évaluations individuelles</strong><br/> -->
+        <p>Enfin, bien que le projet soit évalué en grande partie à l’échelle de l’équipe, cela n’exclut pas des <strong>évaluations individuelles</strong>, plusieurs mécanismes d’évaluation individuelle, tels que les <em>quiz</em> théoriques, les démos de suivi lors de périodes de développement guidées, ou encore les entrevues individuelles finales, permettront d’évaluer les compétences propres à chaque personne étudiante, ainsi que les apprentissages réalisés tout au long de la session.</p>
+
+        <p>Ces évaluations visent à assurer que chaque membre de l’équipe a réellement développé les compétences attendues dans le cadre du cours.</p>
+      </section>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
