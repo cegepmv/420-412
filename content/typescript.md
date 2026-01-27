@@ -203,8 +203,8 @@ Void and never
 4. tuples in ts
 5. code reuse with inerface 
 6. heritage etc ds interface  -->
----
-<!-- ### PROJET PRATIQUE 
+---f
+### PROJET PRATIQUE 
 Après avoir introduit les fondements de TypeScript, un projet guidé permettra de mettre ces notions en pratique dans un contexte concret de développement front-end. L’objectif est de construire une petite application de cartographie affichant des entités (un utilisateur et une compagnie) sur une carte, à partir de coordonnées géographiques (latitude/longitude).
 
 Ce projet vise à illustrer plusieurs bénéfices immédiats de TypeScript :
@@ -221,7 +221,22 @@ L’application devra :
 - afficher un marqueur pour chaque entité ;
 - afficher une info-bulle (*popup*) au clic (nom de l’utilisateur / nom de la compagnie).
 
-Le projet sera exécuté en *front-end* à l’aide d’un bundler léger (ex. Parcel).
-Une solution open-source sans clé API sera privilégiée pour l’affichage de la carte (ex. Leaflet + OpenStreetMap), afin de faciliter la reproduction de la démo par tous. -->
+**Génération de données avec Faker** 
+
+Pour le projet de cartographie, des entités (ex. `User`, `Company`) seront créées avec des données réalistes sans avoir à les écrire manuellement. Pour cela, l’application utilisera **Faker**, une bibliothèque open source qui génère des données fictives (noms, adresses, coordonnées, etc.).
+
+> Lien (documentation officielle) :  https://github.com/faker-js/faker
+
+Dans le cadre du projet, Faker sera notamment utilisé pour :
+- générer un **nom** d’utilisateur (ex. nom complet) ;
+- générer une **position géographique** (latitude/longitude) afin de placer un marqueur sur la carte.
+
+<!-- Remarque importante :
+- certaines valeurs retournées par Faker (ex. `latitude`, `longitude`) peuvent être des **chaînes de caractères** ; elles seront donc converties en `number` au besoin (ex. avec `parseFloat`) pour respecter les types attendus. -->
+
+<!-- Enfin, les classes affichables sur la carte devront respecter l’interface `Mappable` (voir section dédiée), c’est-à-dire fournir au minimum :
+- une propriété `location` contenant `lat` et `lng` ;
+- une méthode (ex. `markerContent`) permettant de définir le contenu affiché dans la popup du marqueur. -->
+
 <!-- --------------------------------------DEMO PROJET----------------------------------------------------- -->
 <!-- revision repo git, habituer aux bonnes pratiques -->
