@@ -77,7 +77,7 @@ Copier le code
 this.usersService = new UsersService(); ❌
 ```
 
-### Injection entre modules
+### Injection de dépendance entre modules
 Lorsque l’on veut utiliser un service d’un module dans un autre module, il faut l’exporter.
 
 Exemple : AuthModule qui utilise UsersService
