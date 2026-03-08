@@ -2,7 +2,6 @@
 pre = '<b>9. </b>'
 title = "Interceptors"
 weight = 10
-draft = false
 +++
 
 Au départ, la route `whoAmI` dans `UsersController` fonctionnait ainsi :
