@@ -1,6 +1,6 @@
 
 +++
-pre = '<b>6 </b>'
+pre = '<b>7. </b>'
 title = "TypeORM"
 weight = 8
 draft = false
