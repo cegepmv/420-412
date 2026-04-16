@@ -39,7 +39,7 @@ export default function HostLayout() {
   return (
     <>
       <nav className="host-nav">
-        <Link to="/host/dashboard" className="nav-button">
+        <Link to="." className="nav-button">
           Dashboard
         </Link>
         <Link to="/host/income" className="nav-button">
@@ -85,7 +85,7 @@ Voici comment nous transformons votre structure à plat en une structure hiérar
 function App() {
 
   const router = createBrowserRouter(createRoutesFromElements(
-    <Route path="/" element={<MainLayout />} >
+    <Route path="/" element={<MainLayout user={user} vans={vans}/>} >
       <Route index element={<Home />} />
       <Route path="login" element={<Login />}/>
       <Route path="logout" />
@@ -94,7 +94,7 @@ function App() {
       <Route path="vans" element={<Vans />} />
       <Route path="vans/:id" element={<VanDetail />}/>
 
-      <Route path="/host" element={<HostLayout />}>
+      <Route path="/host" element={<HostLayout hostVans={hostVans} user={user}/>}>
         <Route index element={<Dashboard />}/>
         <Route path="income" element={<Income />}/>
         <Route path="reviews" element={<Reviews />}/>

@@ -86,7 +86,7 @@ import { getVans } from "/src/services/api"
 
 // Cette fonction s'exécute AVANT le rendu
 export async function vansLoader() {
-  return { vans: getVans() }
+  return { vans: await getVans() }
 }
 ```
 
@@ -128,7 +128,7 @@ Dans le fichier `App.jsx`, il faut dire à la route quel *loader* utiliser :
 ```js
 export function loader({ params }) {
   // params.id contient l'ID de l'URL
-  return getVan(params.id)
+  return await getVan(params.id)
 }
 ```
 
@@ -175,7 +175,7 @@ export default function MainLayout() {
     <div className="site-wrapper">
       <Header user={user} />
       <main>
-        <Outlet context={{ user }} />
+        <Outlet/>
       </main>
       <Footer />
     </div>
@@ -191,14 +191,12 @@ import "./Header.css"
 
 export default function Header({ user }) {
 
-  const linkClassName = ({ isActive }) => isActive ? "nav-button active" : "nav-button"
-
   return (
     <header>
       <Link className="site-logo" to="/">#VanLife</Link>
       <nav>
-        <NavLink className={linkClassName} to="/about">About</NavLink>
-        <NavLink className={linkClassName} to="/vans">Vans</NavLink>
+        <Link className={linkClassName} to="/about">About</Link>
+        <Link className={linkClassName} to="/vans">Vans</Link>
         {/* 
           Utilisateur connecté: le bouton affiche son nom et le redirige vers son dashboard 
           Utilisateur pas connecté: affiche "Login" et le redirige vers la page de connexion
