@@ -128,14 +128,14 @@ Dans le fichier `App.jsx`, il faut dire à la route quel *loader* utiliser :
 ```js
 export function loader({ params }) {
   // params.id contient l'ID de l'URL
-  return await getVan(params.id)
+  return { van: await getVan(params.id) }
 }
 ```
 
 **Composant de la page VanDetail :**
 ```jsx
 export default function VanDetail() {
-  const { van } = useLoaderData()
+  const { van }  = useLoaderData()
 
   return (
     <div className="van-detail-container">
@@ -155,12 +155,12 @@ C'est ici que l'on voit la puissance du MainLayout. On veut savoir qui est l'uti
 ```jsx
 import { getCurrentUser } from "/src/services/api"
 
-export async function mainLayoutLoader({ request }) {
+export async function mainLayoutLoader() {
   try {
     // On fait une requête "whoami" au backend, 
     // si on reçoit les données de l'utilisateur, c'est qu'on est connecté
-    const user = await getCurrentUser(request) 
-    return { user } // L'utilisateur est connecté, on utilise ses données dans le context
+    const user = await getCurrentUser() 
+    return { user: user } // L'utilisateur est connecté, on utilise ses données dans le context
   } catch (error) {
     return { user: null } // Pas de session active, mais on laisse l'app charger
   }
@@ -195,8 +195,8 @@ export default function Header({ user }) {
     <header>
       <Link className="site-logo" to="/">#VanLife</Link>
       <nav>
-        <Link className={linkClassName} to="/about">About</Link>
-        <Link className={linkClassName} to="/vans">Vans</Link>
+        <Link className="nav-button" to="/about">About</Link>
+        <Link className="nav-button" to="/vans">Vans</Link>
         {/* 
           Utilisateur connecté: le bouton affiche son nom et le redirige vers son dashboard 
           Utilisateur pas connecté: affiche "Login" et le redirige vers la page de connexion
@@ -208,7 +208,7 @@ export default function Header({ user }) {
         {/* 
           Utilisateur connecté: Un autre bouton est disponible pour le déconnecter
         */}
-        {user && <button type="submit">Logout</button> }
+        {user && <button>Logout</button> }
       </nav>
     </header>
   )

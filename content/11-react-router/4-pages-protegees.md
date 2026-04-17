@@ -15,7 +15,7 @@ Cette fonction est un *middleware* côté client : elle vérifie si l'utilisateu
 import { redirect } from "react-router-dom"
 import { getCurrentUser } from "../services/api"
 
-export async function requireAuth(request) {  
+export async function requireAuth() {  
   try {
     // 1. On demande au backend NestJS : "Qui suis-je ?" 
     // Si le cookie de session est invalide, l'API lancera une erreur 401
@@ -35,13 +35,13 @@ Pour protéger une route, il suffit d'appeler `requireAuth` à la première lign
 import { getHostVans } from "/src/services/api"
 import { requireAuth } from "/src/services/auth"
 
-export async function hostDashboardLoader({ request }) {
+export async function hostDashboardLoader() {
   // ÉTAPE 1 : Le garde vérifie l'accès
-  const user = await requireAuth(request)
+  const user = await requireAuth()
   
   // ÉTAPE 2 : On ne récupère les données privées QUE si l'étape 1 a réussi
-  const vans = getHostVans(user.id)
-  return { vans, user }
+  const vans = await getHostVans(user.id)
+  return { vans: vans, user: user }
 } 
 ```
 
@@ -56,10 +56,10 @@ C'est un *loader* minimaliste. Son seul rôle est de servir de "garde" en appela
 // loaders/auth.loader.js
 import { requireAuth } from "/src/services/auth"
 
-export async function authLoader({ request }) {
+export async function authLoader() {
   // On attend que requireAuth vérifie la session auprès de NestJS
   // Si l'utilisateur n'est pas connecté, requireAuth jettera (throw) une redirection
-  return await requireAuth(request)
+  return await requireAuth()
 }
 ```
 
